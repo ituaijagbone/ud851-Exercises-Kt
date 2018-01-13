@@ -17,11 +17,14 @@ package com.example.android.favoritetoys
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
-
+    private var mToysListTextView: TextView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mToysListTextView = findViewById(R.id.tv_toy_names) as TextView
+        mToysListTextView?.text = ToyBox.toyNames.joinToString("\n\n\n")
     }
 }
