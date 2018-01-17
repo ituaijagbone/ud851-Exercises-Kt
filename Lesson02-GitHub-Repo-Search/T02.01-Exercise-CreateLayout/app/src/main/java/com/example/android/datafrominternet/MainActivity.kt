@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.example.android.datafrominternet.utilities.NetworkUtils
 
 class MainActivity : AppCompatActivity() {
-
     private lateinit var mSearchBoxEditText: EditText
     private var mUrlDisplayTextView: TextView? = null
     private var mSearchResultsTextView: TextView? = null
@@ -39,7 +38,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun makeGithubSearchQuery() {
-        val request = NetworkUtils.buildUrl(mSearchBoxEditText.text.toString())
-        mUrlDisplayTextView?.text = request?.toString()
+        val request = NetworkUtils.buildUrl(mSearchBoxEditText.text.toString()) ?: return
+        mUrlDisplayTextView?.text = request.toString()
+        val response = NetworkUtils.getResponseFromHttpUrl(request)
+        mSearchResultsTextView?.text = response
     }
 }

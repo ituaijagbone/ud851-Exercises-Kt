@@ -4,6 +4,7 @@ import android.widget.EditText
 import android.widget.TextView
 import com.example.android.datafrominternet.utilities.NetworkUtils
 import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertNotSame
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -62,5 +63,19 @@ class MainActivityTests {
 
         val urlDisplayTextView = activity.findViewById(R.id.tv_url_display) as TextView
         assertEquals(urlDisplayTextView.text, NetworkUtils.buildUrl(query).toString())
+    }
+
+    @Test
+    fun searchResultsTextViewIsSetWhenSearchButtonIsClicked() {
+        val context = RuntimeEnvironment.application
+        val query = "android"
+        val searchBoxEditText = activity.findViewById(R.id.et_search_box) as EditText
+        searchBoxEditText.setText(query)
+
+        val searchMenuItem = shadowOf(activity).optionsMenu.findItem(R.id.action_search)
+        activity.onOptionsItemSelected(searchMenuItem)
+
+        val searchResultsTextView = activity.findViewById(R.id.tv_github_search_results_json) as TextView
+        assertNotSame(searchResultsTextView.text, context.getString(R.string.query_prompt))
     }
 }
