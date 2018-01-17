@@ -6,11 +6,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
+import com.example.android.datafrominternet.utilities.NetworkUtils
 
 class MainActivity : AppCompatActivity() {
 
-    private var mSearchBoxEditText: EditText? = null
+    private lateinit var mSearchBoxEditText: EditText
     private var mUrlDisplayTextView: TextView? = null
     private var mSearchResultsTextView: TextView? = null
 
@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mUrlDisplayTextView = findViewById(R.id.et_search_box) as EditText
+        mSearchBoxEditText = findViewById(R.id.et_search_box) as EditText
         mUrlDisplayTextView = findViewById(R.id.tv_url_display) as TextView
         mSearchResultsTextView = findViewById(R.id.tv_github_search_results_json) as TextView
     }
@@ -31,10 +31,15 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when {
             item?.itemId == R.id.action_search -> {
-                Toast.makeText(this, "Search Clicked", Toast.LENGTH_SHORT).show()
+                makeGithubSearchQuery()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun makeGithubSearchQuery() {
+        val request = NetworkUtils.buildUrl(mSearchBoxEditText.text.toString())
+        mUrlDisplayTextView?.text = request?.toString()
     }
 }

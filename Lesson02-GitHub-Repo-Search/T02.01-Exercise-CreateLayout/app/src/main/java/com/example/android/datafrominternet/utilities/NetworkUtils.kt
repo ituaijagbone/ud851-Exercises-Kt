@@ -15,11 +15,11 @@
  */
 package com.example.android.datafrominternet.utilities
 
+import android.net.Uri
 import java.io.IOException
-import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.util.Scanner
+import java.util.*
 
 /**
  * These utilities will be used to communicate with the network.
@@ -44,7 +44,13 @@ object NetworkUtils {
      * @return The URL to use to query the weather server.
      */
     fun buildUrl(githubSearchQuery: String): URL? {
-        return null
+        val uri = Uri.parse(GITHUB_BASE_URL)
+                .buildUpon()
+                .appendQueryParameter(PARAM_QUERY, githubSearchQuery)
+                .appendQueryParameter(PARAM_SORT, sortBy)
+                .build()
+        val url = URL(uri.toString())
+        return url
     }
 
     /**

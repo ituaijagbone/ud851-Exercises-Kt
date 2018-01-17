@@ -2,6 +2,7 @@ package com.example.android.datafrominternet
 
 import android.widget.EditText
 import android.widget.TextView
+import com.example.android.datafrominternet.utilities.NetworkUtils
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -48,5 +49,18 @@ class MainActivityTests {
         assertEquals(activity.onOptionsItemSelected(searchMenuItem), true)
 
         assertEquals(activity.onOptionsItemSelected(null), false)
+    }
+
+    @Test
+    fun urlDisplayTextViewIsSetWhenSearchIsClicked() {
+        val query = "android"
+        val searchBoxEditText = activity.findViewById(R.id.et_search_box) as EditText
+        searchBoxEditText.setText(query)
+
+        val searchMenuItem = shadowOf(activity).optionsMenu.findItem(R.id.action_search)
+        activity.onOptionsItemSelected(searchMenuItem)
+
+        val urlDisplayTextView = activity.findViewById(R.id.tv_url_display) as TextView
+        assertEquals(urlDisplayTextView.text, NetworkUtils.buildUrl(query).toString())
     }
 }
