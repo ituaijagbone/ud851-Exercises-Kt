@@ -4,7 +4,6 @@ import android.widget.EditText
 import android.widget.TextView
 import com.example.android.datafrominternet.utilities.NetworkUtils
 import junit.framework.Assert.assertEquals
-import junit.framework.Assert.assertNotSame
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
@@ -72,10 +71,15 @@ class MainActivityTests {
         val searchBoxEditText = activity.findViewById(R.id.et_search_box) as EditText
         searchBoxEditText.setText(query)
 
+        val condition = "this is the response from url"
+        activity.getResponseFromHttpUrl = { url ->
+            condition
+        }
+
         val searchMenuItem = shadowOf(activity).optionsMenu.findItem(R.id.action_search)
         activity.onOptionsItemSelected(searchMenuItem)
 
         val searchResultsTextView = activity.findViewById(R.id.tv_github_search_results_json) as TextView
-        assertNotSame(searchResultsTextView.text, context.getString(R.string.query_prompt))
+        assertEquals(searchResultsTextView.text, condition)
     }
 }
