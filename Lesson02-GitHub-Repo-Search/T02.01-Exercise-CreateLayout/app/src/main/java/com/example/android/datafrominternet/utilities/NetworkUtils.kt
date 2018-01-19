@@ -16,8 +16,8 @@
 package com.example.android.datafrominternet.utilities
 
 import android.net.Uri
-import java.io.IOException
 import java.net.HttpURLConnection
+import java.net.MalformedURLException
 import java.net.URL
 import java.util.*
 
@@ -49,8 +49,7 @@ object NetworkUtils {
                 .appendQueryParameter(PARAM_QUERY, githubSearchQuery)
                 .appendQueryParameter(PARAM_SORT, sortBy)
                 .build()
-        val url = URL(uri.toString())
-        return url
+        return try { URL(uri.toString()) } catch (e: MalformedURLException) { null }
     }
 
     /**
@@ -58,13 +57,12 @@ object NetworkUtils {
      *
      * @param url The URL to fetch the HTTP response from.
      * @return The contents of the HTTP response.
-     * @throws IOException Related to network and stream reading
      */
-    @Throws(IOException::class)
     fun getResponseFromHttpUrl(url: URL): String? {
-        val urlConnection = url.openConnection() as HttpURLConnection
+        var urlConnection: HttpURLConnection? = null
         try {
-            val `in` = urlConnection.inputStream
+            urlConnection = url.openConnection() as? HttpURLConnection
+            val `in` = urlConnection?.inputStream
 
             val scanner = Scanner(`in`)
             scanner.useDelimiter("\\A")
@@ -76,7 +74,7 @@ object NetworkUtils {
                 null
             }
         } finally {
-            urlConnection.disconnect()
+            urlConnection?.disconnect()
         }
     }
 }

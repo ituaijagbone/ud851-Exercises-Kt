@@ -19,4 +19,5 @@
     <string name="query_prompt">Make a search and your result will show up here!</string>
     <string name="url_display">Your search URL will show up here when you click search</string>
     <string name="search">Search</string>
+    <string name="error_message">Failed to get result please try again.</string>
 </resources>
