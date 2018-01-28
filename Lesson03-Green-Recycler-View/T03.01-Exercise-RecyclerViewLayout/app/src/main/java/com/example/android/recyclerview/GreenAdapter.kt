@@ -22,7 +22,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 
-class GreenAdapter(private val itemCount: Int) :
+interface ListItemClickListener {
+    fun onListItemClick(itemPosition: Int)
+}
+
+
+class GreenAdapter(private val itemCount: Int, private val clickListener: ListItemClickListener) :
         RecyclerView.Adapter<GreenAdapter.NumberViewHolder>() {
     override fun getItemCount() = itemCount
 
@@ -34,7 +39,14 @@ class GreenAdapter(private val itemCount: Int) :
 
         val view = inflater.inflate(layoutIdForListItem, viewGroup, shouldAttachToParentImmediately)
 
-        return NumberViewHolder(view)
+        val viewHolder = NumberViewHolder(view, clickListener)
+        viewHolder.viewHolderIndex.text = "ViewHolder index: $viewHolderCount"
+        val backgroundColorForViewHolder = ColorUtils
+                .getViewHolderBackgroundColorFromInstance(context, viewHolderCount)
+        viewHolder.itemView.setBackgroundColor(backgroundColorForViewHolder)
+
+        viewHolderCount++
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: NumberViewHolder, position: Int) {
@@ -42,16 +54,24 @@ class GreenAdapter(private val itemCount: Int) :
         holder.bind(position)
     }
 
-    inner class NumberViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+    class NumberViewHolder(itemView: View, private val clickListener: ListItemClickListener) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        init {
+            itemView.setOnClickListener(this)
+        }
         var listItemNumberView: TextView = itemView.findViewById(R.id.tv_item_number) as TextView
+        var viewHolderIndex: TextView = itemView.findViewById(R.id.tv_view_holder_instance) as TextView
 
         fun bind(listIndex: Int) {
             listItemNumberView.text = listIndex.toString()
+        }
+
+        override fun onClick(v: View?) {
+            clickListener.onListItemClick(adapterPosition)
         }
     }
 
     companion object {
         private val TAG = GreenAdapter::class.java.simpleName
+        var viewHolderCount = 0
     }
 }

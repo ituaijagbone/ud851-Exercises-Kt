@@ -19,11 +19,15 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Menu
+import android.view.MenuItem
+import android.widget.Toast
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ListItemClickListener {
 
-    private var mAdapter: GreenAdapter? = null
-    private var mNumbersList: RecyclerView? = null
+    private var mToast: Toast? = null
+    private lateinit var mAdapter: GreenAdapter
+    private lateinit var mNumbersList: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,13 +36,36 @@ class MainActivity : AppCompatActivity() {
         mNumbersList = findViewById(R.id.rv_numbers) as RecyclerView
 
         val layoutManager = LinearLayoutManager(this)
-        mNumbersList!!.setLayoutManager(layoutManager)
+        mNumbersList.layoutManager = layoutManager
 
-        mNumbersList!!.setHasFixedSize(true)
+        mNumbersList.setHasFixedSize(true)
 
-        mAdapter = GreenAdapter(NUM_LIST_ITEMS)
+        mAdapter = GreenAdapter(NUM_LIST_ITEMS, this)
 
-        mNumbersList!!.setAdapter(mAdapter)
+        mNumbersList.adapter = mAdapter
+    }
+
+    override fun onListItemClick(itemPosition: Int) {
+        mToast?.cancel()
+        mToast = Toast.makeText(this, "Item #$itemPosition clicked.", Toast.LENGTH_LONG)
+        mToast?.show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item?.itemId) {
+            R.id.action_refresh -> {
+                mAdapter = GreenAdapter(NUM_LIST_ITEMS, this)
+                mNumbersList.adapter = mAdapter
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {
