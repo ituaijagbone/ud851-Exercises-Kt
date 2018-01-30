@@ -9,7 +9,7 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
-class ChildActivityTests {
+class ChildActivityTest {
     @Test
     fun displayTextViewHasDefaultText() {
         val activity = Robolectric.setupActivity(ChildActivity::class.java)
