@@ -13,26 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.explicitintent;
+package com.example.android.explicitintent
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
+import android.widget.TextView
 
 // COMPLETED (1) Use Android Studio's Activity wizard to create a new Activity called ChildActivity
-public class ChildActivity extends AppCompatActivity {
+class ChildActivity : AppCompatActivity() {
 
     // COMPLETED (6) Create a TextView field to display your message
     /* Field to store our TextView */
-    private TextView mDisplayText;
+    private var mDisplayText: TextView? = null
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_child);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_child)
 
         // COMPLETED (7) Get a reference to your TextView in Java
         /* Typical usage of findViewById... */
-        mDisplayText = (TextView) findViewById(R.id.tv_display);
+        mDisplayText = findViewById(R.id.tv_display) as TextView
     }
 }
