@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
             val context = this@MainActivity
             val destinationActivity = ChildActivity::class.java
             val intent = Intent(context, destinationActivity)
+            intent.putExtra(Intent.EXTRA_TEXT, mNameEntry.text.toString())
             startActivity(intent)
         }
     }
